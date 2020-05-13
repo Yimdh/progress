@@ -1,0 +1,11 @@
+#Package
+*.jar
+*.tar
+
+#autosave
+.ipynb_checkpoints*
+.Rdata*
+
+# OS
+.DS_store*
+
