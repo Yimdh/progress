@@ -1,0 +1,32 @@
+select device , temp, start_date ,sum(sales) as sales, count(temp) as cnt
+from 
+(select device ,first_value(pay_date) over (partition by device , temp order by pay_date) as start_date,sales,temp
+from (
+select *, sum(tmp) over (partition by device order by pay_date) as temp
+from(
+select pay_date , day_of_week(date(pay_date )) as wod,if(day_of_week(date(pay_date ))=3,1,0) as tmp,
+case when device like '%PAPER%' then 'PAPER'
+when device in('iPad','iPhone') then 'iOS'
+when device like '%Android%' then 'Android'
+else device end as device
+,sum(sum) as sales
+from revenue.user_book_detail
+where device is not null 
+and device != ''
+--and year =2020
+--and month in (4)
+and cancel_date is null 
+and year(date(pay_date) )=2020
+and month(date(pay_date) ) in (1,2,3,4,5)
+and sum>0
+group by pay_date ,day_of_week(date(pay_date )),case when device like '%PAPER%' then 'PAPER'
+when device in('iPad','iPhone') then 'iOS'
+when device like '%Android%' then 'Android'
+else device end  ,if(day_of_week(date(pay_date ))=3,1,0)
+order by pay_date 
+)))
+where device in ('PAPER','iOS','Android','PC')
+group by device ,temp,start_date
+having count(temp) =7
+order by start_date
+
