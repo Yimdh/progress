@@ -16,24 +16,18 @@ fit
 
 #install.packages("FSA")
 library(FSA)
-
+library(ggplot2)
 A<-c(runif(50,0,0.4),0.87,runif(50,0.9,0.95))
 B<-c(runif(50,0,0.4),0.74,runif(50,0.9,0.95))
 C<-c(runif(50,0.5,0.8),0.81,runif(50,0.96,1))
 cat("median(A) :",median(A),",median(B):",median(B),",median(C):",median(C),"\n")
 grps<-c(rep(0,length(A)),rep(1,length(B)),rep(2,length(C)))
 data<-data.frame(x=c(A,B,C),gr=as.factor(grps))
-ggplot(data=data,mapping=aes(x=x,color=gr)) + geom_histogram(bins=100)
+ggplot(data=data,mapping=aes(x=x,color=gr)) + geom_histogram(bins=100,position='identity',alpha=0.5)
 kruskal.test(x ~ gr, data = data)
 dunnTest(x ~ gr,
          data=data,
          method="bonferroni")
-
-
-median(A)
-median(B)
-median(C)
-
 
 #A<-c(3,4,5,9,8,10,9)
 #B<-c(4,3,7,9,11)
