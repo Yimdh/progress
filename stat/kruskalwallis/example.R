@@ -29,6 +29,22 @@ dunnTest(x ~ gr,
          data=data,
          method="bonferroni")
 
+
+n<-2000
+A<-c(runif(n*0.8,0,0),runif(n*0.2,4.3,4.4))
+B<-c(runif(n*0.8,0,0),rep(n*0.03,0.1,0.5),runif(n*0.17,4.3,4.4))
+C<-c(runif(n*0.8,0,0),runif(n*0.2,4,4.2))
+cat("median(A) :",median(A),",median(B):",median(B),",median(C):",median(C),"\n")
+cat("mean(A) :",mean(A),",mean(B):",mean(B),",mean(C):",mean(C),"\n")
+grps<-c(rep("A",length(A)),rep("B",length(B)),rep("C",length(C)))
+data<-data.frame(x=c(A,B,C),gr=as.factor(grps))
+ggplot(data=data,mapping=aes(x=x,color=gr)) + geom_histogram(bins=100,position='identity',alpha=0.5)
+kruskal.test(x ~ gr, data = data)
+dunnTest(x ~ gr,
+         data=data,
+         method="bonferroni")
+
+
 #A<-c(3,4,5,9,8,10,9)
 #B<-c(4,3,7,9,11)
 #C<-c(11,12,9,10,11)
